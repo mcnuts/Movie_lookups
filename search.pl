@@ -155,7 +155,7 @@ my $file_type = scraper {
 		for my $k (@{$type->{files}}){
 		$ok=0;
 		if($k=~m/(.avi|.mkv|.mp4)/){ 
-			if($k!~m/(CD01.avi|CD1.avi|CD2.avi|CD02.avi|CD01.mp4|CD02.mp4|.r01|.rar)/){
+			if($k!~m/(CD01.avi|CD1.avi|CD2.avi|CD02.avi|CD01.mp4|CD02.mp4|CD1|CD2|cd1|cd2|.r01|.rar)/){
 				$ok=1;
 			}
 		}
@@ -186,7 +186,7 @@ if($res->is_success){
 		for my $t (@{$type->{files}}){
 		$ok=0;
 		if($t=~m/(.avi|.mkv|.mp4)/){
-			if($t!~m/(CD01.avi|CD1.avi|CD2.avi|CD02.avi|CD01.mp4|CD02.mp4|.r01|.rar)/){
+			if($t!~m/(CD01.avi|CD1.avi|CD2.avi|CD02.avi|CD01.mp4|CD02.mp4|CD1|CD2|cd1|cd2|.r01|.rar)/){
 				$ok=1;
 			}
 		}
@@ -217,7 +217,7 @@ for (@$tlist){
 		}
 		foreach(@files){
 			$file=$_;
-				if($file=~m/.r00|.r01|.rar|CD01|CD02|cd01|cd02|.zip/){
+				if($file=~m/.r00|.r01|.rar|CD01|CD02|cd01|cd02|CD1|CD2|cd1|cd2|.zip/){
 					print "Matches the fails\n";
 				$kk=0
 			}
