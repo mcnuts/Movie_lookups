@@ -4,7 +4,7 @@ use Web::Scraper;
 use URI;
 use LWP::UserAgent qw();
 use RTPG;
-
+use Data::Dumper;
 $rt = new RTPG(url=>'10.20.10.34:5000');
 my $api = new WWW::TheMovieDB({
 	'key'           =>      '57983e31fb435df4df77afb854740ea9',
@@ -14,6 +14,7 @@ my $api = new WWW::TheMovieDB({
 });
 $ua = LWP::UserAgent->new;
 $search=$ARGV[0];
+$quality="+xvid" unless $ARGV[1];
 die "Error: No Movie Entered!" unless $ARGV[0];
 $s= $api->Search::movie({
 	'query' => $search
@@ -61,7 +62,7 @@ my $links = scraper {
 };
 
 
-my $search = $links->scrape( URI->new("http://torrentz.eu/search?f=movies+dvdrip+xvid+$searchable") );
+my $search = $links->scrape( URI->new("http://torrentz.eu/search?f=movies$quality+seed+>+5+$searchable") );
 
 #create hashes
 %hash_names=();
@@ -132,7 +133,7 @@ until($complete==1){
 		$ct2++;
 	}
 	if($ct2 == $total_links){
-		print "Failed, Coudn't find a torrent file, will have to be manual process\n";
+		print "Failed, Coudn't find a torrent file, will have to be a manual lookup\n";
 		$complete=1;
 	}
 }
@@ -147,7 +148,6 @@ sub katmirror{
 my $kat=shift;
 $res = $ua->head($kat);
 if($res->is_success){
-
 my $file_type = scraper {
                  process '.torrentFileList ', 'files[]' => 'TEXT';
        };
@@ -178,7 +178,6 @@ sub torrenthound{
 my $t_hound=shift;
 $res = $ua->head($t_hound);
 if($res->is_success){
-
 	my $file_type = scraper {
                  process 'li.leaf', 'files[]' => 'TEXT';
        };
