@@ -80,6 +80,25 @@ for my $text (@{$result->{text}}){
 	}
 }
 
+unless(%hash_names && %hash_links){
+print "Standard quality lookup failed, moving on to HD!\n";
+my $search = $links->scrape( URI->new("http://torrentz.eu/search?f=movies+seed+>+5+$searchable") );
+%hash_names=();
+%hash_links=();
+$count=1;
+for my $result (@{$search->{info}}) {
+for my $link (@{$result->{link}}){
+        $hash_links{ $count } = $link;
+        $count++;
+        }
+$count=1; # reset count for next hash 
+for my $text (@{$result->{text}}){
+        $hash_names{ $count} = $text;
+        $count++;
+        }
+}
+}
+
 %rhash_names = reverse %hash_names;
 
 ### need to do some sort of sanity checks on the %hash_names, find the best looking ones and then use the key it is assigned to lookup %hash_links for the links to use 
