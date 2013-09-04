@@ -84,9 +84,9 @@ for my $text (@{$result->{text}}){
 	}
 }
 
-unless(%hash_names && %hash_links or $quality eq '+x264'){
+unless(%hash_names && %hash_links){
 print "Standard quality lookup failed, moving on to HD!\n";
-my $search = $links->scrape( URI->new("http://torrentz.eu/search?f=movie*+seed+>+5+$searchable") );
+my $search = $links->scrape( URI->new("http://torrentz.eu/search?f=movie*+x264+seed+>+5+$searchable") );
 %hash_names=();
 %hash_links=();
 $count=1;
@@ -110,11 +110,12 @@ $count=0;
 foreach my $n (values %hash_names) {
 	if ($n=~m/^$name/){
 		if ($n!~m/^$name \d /){
+			if($n!~m/CAM|cam/){
 			$key = $rhash_names{$n};
 			if($count<=10){
 				push(@links, $hash_links{$key});
 				$count++;
-			}
+			}	}
 		}
 	}
 }
