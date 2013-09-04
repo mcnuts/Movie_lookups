@@ -14,7 +14,11 @@ my $api = new WWW::TheMovieDB({
 });
 $ua = LWP::UserAgent->new;
 $search=$ARGV[0];
-$quality="+xvid" unless $ARGV[1];
+if ($ARGV[1] eq "HD"){
+$quality="+x264"; 
+}else{
+$quality="+xvid";
+}
 die "Error: No Movie Entered!" unless $ARGV[0];
 $s= $api->Search::movie({
 	'query' => $search
@@ -62,7 +66,7 @@ my $links = scraper {
 };
 
 
-my $search = $links->scrape( URI->new("http://torrentz.eu/search?f=movies$quality+seed+>+5+$searchable") );
+my $search = $links->scrape( URI->new("http://torrentz.eu/search?f=movie*$quality+seed+>+5+$searchable") );
 
 #create hashes
 %hash_names=();
@@ -80,9 +84,9 @@ for my $text (@{$result->{text}}){
 	}
 }
 
-unless(%hash_names && %hash_links){
+unless(%hash_names && %hash_links or $quality eq '+x264'){
 print "Standard quality lookup failed, moving on to HD!\n";
-my $search = $links->scrape( URI->new("http://torrentz.eu/search?f=movies+seed+>+5+$searchable") );
+my $search = $links->scrape( URI->new("http://torrentz.eu/search?f=movie*+seed+>+5+$searchable") );
 %hash_names=();
 %hash_links=();
 $count=1;
